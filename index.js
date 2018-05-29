@@ -1,26 +1,37 @@
-const request = require('request-promise');
+const express = require('express');
+const auth = require('./auth');
+const buildPlaylist = require('./buildPlaylist');
 
-const options = {
-  json: true,
-  headers: {
-    'Accept': '*/*',
-    'Authorization': 'Bearer i am a secret',
-  },
+const port = 8080;
+const callbackEndpoint = 'callback';
+const redirectUri = `http://localhost:${port}/${callbackEndpoint}`;
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+
+let server;
+
+if (!clientId) {
+  console.error('CLIENT_ID is not set!');
+  process.exit(1);
+}
+
+if (!clientSecret) {
+  console.error('CLIENT_SECRET is not set!');
+  process.exit(1);
+}
+
+const callback = (req, res) => {
+  auth.getAccessToken(clientId, clientSecret, req.query.code, redirectUri).then((token) => {
+    res.send('Building your playlist, switch back to the terminal!');
+
+    buildPlaylist(token).then(() => {
+      server.close();
+    });
+  });
 };
 
-const get = uri => request(Object.assign({}, options, { uri, method: 'GET' }));
-
-const blacklist = ['London Grammar']
-
-get('https://api.spotify.com/v1/me/following?type=artist&limit=50')
-  .then(result => {
-    console.log(result.artists.items.length);
-    console.log(result.artists.items.filter(artist => !blacklist.includes(artist.name)).length);
-  });
-
-/*
-https://beta.developer.spotify.com/documentation/web-api/reference/follow/get-followed/
-https://beta.developer.spotify.com/documentation/web-api/reference/artists/get-artists-albums/
-https://beta.developer.spotify.com/documentation/web-api/reference/albums/get-albums-tracks/
-https://beta.developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
-*/
+const app = express();
+app.get(`/${callbackEndpoint}`, callback);
+server = app.listen(port, () => {
+  auth.beginAuthFlow(clientId, redirectUri);
+});
