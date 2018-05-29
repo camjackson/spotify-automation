@@ -1,5 +1,7 @@
 const request = require('request-promise');
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 module.exports = (auth) => {
   const options = {
     json: true,
@@ -9,6 +11,16 @@ module.exports = (auth) => {
     },
   };
   const get = uri => request(Object.assign({}, options, { uri, method: 'GET' }));
+
+  const getSlowly = (uris, time) => (
+    uris.reduce((promise, uri) => (
+      promise.then(accumulator => (
+        sleep(time)
+          .then(() => get(uri))
+          .then(result => accumulator.concat(result))
+      ))
+    ), Promise.resolve([]))
+  );
 
   const getAll = (uri, entityType) => {
     let promise;
@@ -28,5 +40,5 @@ module.exports = (auth) => {
     return promise;
   };
 
-  return { get, getAll }
+  return { get, getSlowly, getAll }
 }

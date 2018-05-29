@@ -24,9 +24,10 @@ const callback = (req, res) => {
   auth.getAccessToken(clientId, clientSecret, req.query.code, redirectUri).then((token) => {
     res.send('Building your playlist, switch back to the terminal!');
 
-    buildPlaylist(token).then(() => {
-      server.close();
-    });
+    buildPlaylist(token).then(
+      () => server.close(),
+      () => server.close()
+    );
   });
 };
 
