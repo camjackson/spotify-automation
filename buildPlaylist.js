@@ -16,7 +16,7 @@ module.exports = (auth) => {
       filtered.forEach(artist => {
         console.log(artist.name);
       });
-      console.log('-------------\n\n');
+      console.log('-------------\n');
 
       return Promise.all(filtered.map(artist => get(`${baseUrl}/artists/${artist.id}/albums?limit=50`, 'albums')));
     })
@@ -26,8 +26,9 @@ module.exports = (auth) => {
       ), []);
 
       console.log('-------------');
-      console.log(`Listed ${albums.length} albums:`);
-      console.log('-------------\n\n');
+      console.log(`Listed ${albums.length} albums`);
+      console.log('Listing all their tracks...');
+      console.log('-------------\n');
 
       const albumsUrls = [];
       const numberOfAlbumsRequests = Math.ceil(albums.length / 20);
@@ -41,11 +42,12 @@ module.exports = (auth) => {
       const albums = albumChunks.reduce((result, albumChunk) => result.concat(albumChunk.albums), []);
       const allAlbumsAllTracks = albums.map(album => album.tracks.items);
       const tracks = allAlbumsAllTracks.reduce((result, albumTracks) => result.concat(albumTracks), []);
+      const trackMap = tracks.reduce((result, track) => Object.assign(result, { [track.id]: track }), {});
 
       console.log('-------------');
       console.log(`Listed ${tracks.length} tracks`);
       console.log('Fetching all their audio features...');
-      console.log('-------------\n\n');
+      console.log('-------------\n');
 
       const trackFeaturesUrls = [];
       const numberOfTrackFeaturesRequests = Math.ceil(tracks.length / 100);
@@ -53,16 +55,23 @@ module.exports = (auth) => {
         const trackIds = tracks.slice(i * 100, (i+1) * 100).map(track => track.id).join(',');
         trackFeaturesUrls.push(`${baseUrl}/audio-features?ids=${trackIds}`);
       }
-      return getSlowly(trackFeaturesUrls);
+      return getSlowly(trackFeaturesUrls)
+        .then(result => [result, trackMap]);
     })
-    .then(trackFeatureGroups => {
-      const trackFeatures = trackFeatureGroups.reduce((result, trackFeatureGroup) => result.concat(trackFeatureGroup.audio_features), []);
+    .then(([trackFeatureGroups, trackMap]) => {
+      const trackFeatures = trackFeatureGroups
+        .reduce((result, trackFeatureGroup) => result.concat(trackFeatureGroup.audio_features), [])
+        .filter(track => !!track)
+        .map(track => Object.assign(track, {
+          name: trackMap[track.id].name,
+          artists: trackMap[track.id].artists.map(artist => artist.name),
+        }));
 
       console.log('-------------');
       console.log(`Got features for ${trackFeatures.length} tracks`);
       console.log('Caching the data to trackFeatures.json...');
       fs.writeFileSync('./trackFeatures.json', JSON.stringify(trackFeatures, null, 2));
       console.log('Done!');
-      console.log('-------------\n\n');
+      console.log('-------------\n');
     });
 }
