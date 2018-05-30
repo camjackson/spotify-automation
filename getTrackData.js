@@ -2,23 +2,21 @@ const fs = require('fs');
 const createGetters = require('./getters');
 const baseUrl = 'https://api.spotify.com/v1';
 
-const blacklist = ['London Grammar'];
-
 module.exports = (auth) => {
   const { get, getSlowly, getAll } = createGetters(auth);
 
   return getAll(`${baseUrl}/me/following?type=artist&limit=50`, 'artists')
     .then(artists => {
       console.log('-------------');
-      console.log(`Fetched ${artists.length} artists. Filtering...`);
-      const filtered = artists.filter(artist => !blacklist.includes(artist.name));
-      console.log('Filtered down to these artists:');
-      filtered.forEach(artist => {
+      console.log(`Fetched ${artists.length} artists:`);
+      artists.forEach(artist => {
         console.log(artist.name);
       });
       console.log('-------------\n');
 
-      return Promise.all(filtered.map(artist => get(`${baseUrl}/artists/${artist.id}/albums?limit=50`, 'albums')));
+      return Promise.all(artists.map(artist => (
+        get(`${baseUrl}/artists/${artist.id}/albums?limit=50&include_groups=album,single,compilation`, 'albums')
+      )));
     })
     .then(allArtistsAllAlbums => {
       const albums = allArtistsAllAlbums.reduce((result, artistAlbums) => (
