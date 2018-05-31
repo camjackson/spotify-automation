@@ -1,7 +1,7 @@
 const express = require('express');
 const { clientId, clientSecret } = require('./creds');
 const auth = require('./auth');
-const getTrackData = require('./getTrackData');
+const command = require(`./${process.argv[2]}`);
 
 const port = 8080;
 const callbackEndpoint = 'callback';
@@ -19,11 +19,16 @@ if (!clientSecret) {
   process.exit(1);
 }
 
+if (!command) {
+  console.log('command not set or invalid');
+  process.exit(1);
+}
+
 const callback = (req, res) => {
   auth.getAccessToken(clientId, clientSecret, req.query.code, redirectUri).then((token) => {
     res.send('Building your playlist, switch back to the terminal!');
 
-    getTrackData(token)
+    command(token)
       .then(() => server.close())
       .catch((e) => {
         console.error(e);

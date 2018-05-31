@@ -1,16 +1,16 @@
-const request = require('request-promise');
+const requestPromise = require('request-promise');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 module.exports = (auth) => {
-  const options = {
+  const request = requestPromise.defaults({
     json: true,
     headers: {
       'Accept': '*/*',
       'Authorization': auth,
     },
-  };
-  const get = uri => request(Object.assign({}, options, { uri, method: 'GET' }));
+  });
+  const get = uri => request.get({ uri });
 
   const getSlowly = (uris, time) => (
     uris.reduce((promise, uri) => (

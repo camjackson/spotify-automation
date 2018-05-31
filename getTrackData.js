@@ -1,9 +1,9 @@
 const fs = require('fs');
-const createGetters = require('./getters');
+const initApi = require('./api');
 const baseUrl = 'https://api.spotify.com/v1';
 
 module.exports = (auth) => {
-  const { get, getSlowly, getAll } = createGetters(auth);
+  const { get, getSlowly, getAll } = initApi(auth);
 
   return getAll(`${baseUrl}/me/following?type=artist&limit=50`, 'artists')
     .then(artists => {

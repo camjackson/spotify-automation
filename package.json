@@ -2,7 +2,7 @@
   "name": "spotify-automation",
   "version": "1.0.0",
   "repository": "git@github.com:camjackson/spotify-automation",
-  "author": "Cam Jackson <camjackson89@gmail.com>",
+  "author": "Cam Jackson",
   "license": "MIT",
   "scripts": {
     "start": "node index.js"
