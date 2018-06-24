@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { arraysEqual } = require('./arrayUtils');
 const tracks = require('./trackFeatures');
 
 const maxAcousticness = 0.9;
@@ -17,4 +18,14 @@ const filtered = tracks.filter(track => (
 ));
 
 console.log(`Reduced down to ${filtered.length} tracks`);
-fs.writeFileSync('filtered.json', JSON.stringify(filtered, null, 2));
+
+console.log(`De-duping ${filtered.length} tracks`);
+const compareTracks = first => second => (
+  first.name === second.name && arraysEqual(first.artists, second.artists)
+);
+const uniqueTracks = filtered.filter((track, index) => (
+  filtered.findIndex(compareTracks(track)) === index
+));
+console.log(`Reduced down to ${uniqueTracks.length} tracks`);
+
+fs.writeFileSync('filtered.json', JSON.stringify(uniqueTracks, null, 2));
