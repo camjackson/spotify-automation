@@ -14,7 +14,7 @@ const interestingFeatures = [
 
 interestingFeatures.forEach(feature => {
   console.log(`Sorting by ${feature}`);
-  const sorted = tracks.sort((a, b) =>  a[feature] - b[feature]);
+  const sorted = tracks.sort((a, b) => a[feature] - b[feature]);
   fs.writeFileSync(`./sortedBy/${feature}.json`, JSON.stringify(sorted, null, 2));
   console.log(`Wrote sorted tracks to ./sortedBy/${feature}.json`);
 });

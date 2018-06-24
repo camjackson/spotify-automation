@@ -12,5 +12,21 @@
     "opn": "^5.3.0",
     "request": "^2.85.0",
     "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.12.0"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "rules": {
+      "max-len": "off",
+      "no-console": "off",
+      "arrow-parens": "off",
+      "prefer-destructuring": "off",
+      "operator-linebreak": "off",
+      "no-plusplus": "off"
+    }
   }
 }

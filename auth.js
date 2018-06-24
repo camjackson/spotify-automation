@@ -44,4 +44,4 @@ const getAccessToken = (clientId, clientSecret, code, redirect) => {
 module.exports = {
   beginAuthFlow,
   getAccessToken,
-}
+};

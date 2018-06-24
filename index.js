@@ -1,6 +1,8 @@
 const express = require('express');
 const { clientId, clientSecret } = require('./creds');
 const auth = require('./auth');
+
+/* eslint-disable-next-line import/no-dynamic-require */
 const command = require(`./${process.argv[2]}`);
 
 const port = 8080;

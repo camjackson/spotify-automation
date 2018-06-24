@@ -1,16 +1,17 @@
 const requestPromise = require('request-promise');
 
+const baseUrl = 'https://api.spotify.com/v1';
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 module.exports = (auth) => {
   const request = requestPromise.defaults({
     json: true,
     headers: {
-      'Accept': '*/*',
-      'Authorization': auth,
+      Accept: '*/*',
+      Authorization: auth,
     },
   });
-  const get = uri => request.get({ uri });
+  const get = uri => request.get({ uri: `${baseUrl}${uri}` });
 
   const getSlowly = (uris, time) => (
     uris.reduce((promise, uri) => (
@@ -23,7 +24,6 @@ module.exports = (auth) => {
   );
 
   const getAll = (uri, entityType) => {
-    let promise;
     let result = [];
 
     const accumulate = response => {
@@ -36,8 +36,7 @@ module.exports = (auth) => {
       return result;
     };
 
-    promise = get(uri).then(accumulate);
-    return promise;
+    return get(uri).then(accumulate);
   };
 
   return { get, getSlowly, getAll }
