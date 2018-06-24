@@ -1,5 +1,6 @@
 const initApi = require('./api');
 const filteredTracks = require('./filtered.json');
+const { chunkify } = require('./arrayUtils');
 
 const tracks = filteredTracks.sort((a, b) => b.tempo - a.tempo);
 
@@ -32,12 +33,7 @@ module.exports = (auth) => {
       console.log('-------------');
       console.log(`Adding ${tracks.length} tracks to the playlist...`);
 
-      const trackUriSets = [];
-      const numberOfTrackAddRequests = Math.ceil(tracks.length / 100);
-      for (let i = 0; i < numberOfTrackAddRequests; i++) {
-        const trackUris = tracks.slice(i * 100, (i + 1) * 100).map(track => track.uri);
-        trackUriSets.push(trackUris);
-      }
+      const trackUriSets = chunkify(tracks, 100, track => track.uri);
       return postAll(`/users/${user.id}/playlists/${playlist.id}/tracks`, trackUriSets)
         .then(() => [playlist, user]);
     }).then(([playlist, user]) => {

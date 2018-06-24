@@ -1,5 +1,6 @@
 const fs = require('fs');
 const initApi = require('./api');
+const { chunkify } = require('./arrayUtils');
 
 module.exports = (auth) => {
   const { get, getSlowly, getAll } = initApi(auth);
@@ -27,12 +28,8 @@ module.exports = (auth) => {
       console.log('Listing all their tracks...');
       console.log('-------------\n');
 
-      const albumsUrls = [];
-      const numberOfAlbumsRequests = Math.ceil(albums.length / 20);
-      for (let i = 0; i < numberOfAlbumsRequests; i++) {
-        const albumIds = albums.slice(i * 20, (i + 1) * 20).map(album => album.id).join(',');
-        albumsUrls.push(`/albums?ids=${albumIds}`);
-      }
+      const albumsUrls = chunkify(albums, 20, album => album.id)
+        .map(albumIds => `/albums?ids=${albumIds.join(',')}`);
       return getSlowly(albumsUrls);
     })
     .then(albumChunks => {
@@ -46,12 +43,8 @@ module.exports = (auth) => {
       console.log('Fetching all their audio features...');
       console.log('-------------\n');
 
-      const trackFeaturesUrls = [];
-      const numberOfTrackFeaturesRequests = Math.ceil(tracks.length / 100);
-      for (let i = 0; i < numberOfTrackFeaturesRequests; i++) {
-        const trackIds = tracks.slice(i * 100, (i + 1) * 100).map(track => track.id).join(',');
-        trackFeaturesUrls.push(`/audio-features?ids=${trackIds}`);
-      }
+      const trackFeaturesUrls = chunkify(tracks, 100, track => track.id)
+        .map(trackIds => `/audio-features?ids=${trackIds.join(',')}`);
       return getSlowly(trackFeaturesUrls)
         .then(result => [result, trackMap]);
     })
