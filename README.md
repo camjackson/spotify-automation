@@ -7,3 +7,4 @@
 5. (Optional) Sort tracks for manual analysis: `node sortTracks.js`
 6. (Optional) Adjust filters to your liking in `filterTracks.js`
 7. `node filterTracks.js`
+8. `yarn start createPlaylist`

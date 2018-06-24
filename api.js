@@ -39,5 +39,17 @@ module.exports = (auth) => {
     return get(uri).then(accumulate);
   };
 
-  return { get, getSlowly, getAll }
-}
+  const post = (uri, body) => request.post({ uri: `${baseUrl}${uri}`, body });
+
+  const postAll = (uri, bodies) => (
+    bodies.reduce((promise, body) => (
+      promise.then(() => (
+        post(uri, body)
+      ))
+    ), Promise.resolve())
+  );
+
+  return {
+    get, getSlowly, getAll, post, postAll,
+  };
+};
