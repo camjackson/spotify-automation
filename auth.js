@@ -26,15 +26,10 @@ const beginAuthFlow = (clientId, redirect) => {
   opn(url, { wait: false });
 };
 
-const getAccessToken = (clientId, clientSecret, code, redirect) => {
+// eslint-disable-next-line camelcase
+const getAccessToken = (client_id, client_secret, code, redirect_uri) => {
   const url = 'https://accounts.spotify.com/api/token';
-  const form = {
-    grant_type: 'authorization_code',
-    code,
-    redirect_uri: redirect,
-    client_id: clientId,
-    client_secret: clientSecret,
-  };
+  const form = { grant_type: 'authorization_code', code, redirect_uri, client_id, client_secret };
 
   return request.post(url, { form }).then(response => (
     `Bearer ${JSON.parse(response).access_token}`

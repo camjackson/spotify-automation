@@ -1,4 +1,5 @@
 node_modules
 creds.js
 sortedBy/
+trackFeatures.json
 filtered.json

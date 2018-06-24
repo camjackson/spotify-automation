@@ -8,3 +8,8 @@
 6. (Optional) Adjust filters to your liking in `filterTracks.js`
 7. `node filterTracks.js`
 8. `yarn start createPlaylist`
+
+Once you have the creds and filters set up how you want them, create a fresh playlist in one step:
+```sh
+./refresh.sh
+```
