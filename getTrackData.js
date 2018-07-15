@@ -34,7 +34,8 @@ module.exports = (auth) => {
     })
     .then(albumChunks => {
       const albums = albumChunks.reduce((result, albumChunk) => result.concat(albumChunk.albums), []);
-      const allAlbumsAllTracks = albums.map(album => album.tracks.items);
+      const allAlbumsAllTracks = albums.map(album => album.tracks.items.map(track => (
+        Object.assign({}, track, { album: album.name }))));
       const tracks = allAlbumsAllTracks.reduce((result, albumTracks) => result.concat(albumTracks), []);
       const trackMap = tracks.reduce((result, track) => Object.assign(result, { [track.id]: track }), {});
 
@@ -55,6 +56,7 @@ module.exports = (auth) => {
         .map(track => Object.assign(track, {
           name: trackMap[track.id].name,
           artists: trackMap[track.id].artists.map(artist => artist.name),
+          album: trackMap[track.id].album,
         }));
 
       console.log('-------------');
