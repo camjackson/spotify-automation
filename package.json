@@ -5,7 +5,8 @@
   "author": "Cam Jackson",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "format": "prettier --write *.js"
   },
   "dependencies": {
     "express": "^4.16.3",
@@ -16,10 +17,17 @@
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^13.0.0",
-    "eslint-plugin-import": "^2.12.0"
+    "eslint-config-prettier": "^3.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "husky": "^1.1.1",
+    "prettier": "^1.14.3",
+    "pretty-quick": "^1.7.0"
   },
   "eslintConfig": {
-    "extends": "airbnb-base",
+    "extends": [
+      "airbnb-base",
+      "prettier"
+    ],
     "rules": {
       "max-len": "off",
       "no-console": "off",
@@ -28,6 +36,15 @@
       "operator-linebreak": "off",
       "no-plusplus": "off",
       "object-curly-newline": "off"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
     }
   }
 }
