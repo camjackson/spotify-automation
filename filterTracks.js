@@ -14,7 +14,9 @@ const artistsWhitelistedAlbums = {
 };
 
 const passesAlbumWhitelist = track => {
-  const matchingArtists = track.artists.filter(artist => artistsWhitelistedAlbums[artist]);
+  const matchingArtists = track.artists.filter(
+    artist => artistsWhitelistedAlbums[artist],
+  );
   if (matchingArtists.length === 0) {
     // None of this track's artists appear in the list above
     return true;
@@ -32,7 +34,12 @@ const passesAlbumWhitelist = track => {
 
 const artistBlacklistedAlbums = {
   Thrice: ['Anthology', 'Live At The House of Blues'],
-  Incubus: ['Live In Sweden 2004', 'Live in Japan 2004', 'Live', 'Live in Malaysia 2004'],
+  Incubus: [
+    'Live In Sweden 2004',
+    'Live in Japan 2004',
+    'Live',
+    'Live in Malaysia 2004',
+  ],
   Alexisonfire: ['Live At Copps'],
 };
 
@@ -48,26 +55,27 @@ const passesAlbumBlacklist = track => {
 };
 
 console.log(`Filtering ${tracks.length} tracks`);
-const filtered = tracks.filter(track => (
-  track.acousticness <= maxAcousticness &&
-  track.tempo >= minTempo &&
-  track.tempo <= maxTempo &&
-  track.duration_ms >= minDuration &&
-  track.liveness <= maxLiveness &&
-  track.instrumentalness <= maxInstrumentalness &&
-  passesAlbumWhitelist(track) &&
-  passesAlbumBlacklist(track)
-));
+const filtered = tracks.filter(
+  track =>
+    track.acousticness <= maxAcousticness &&
+    track.tempo >= minTempo &&
+    track.tempo <= maxTempo &&
+    track.duration_ms >= minDuration &&
+    track.liveness <= maxLiveness &&
+    track.instrumentalness <= maxInstrumentalness &&
+    passesAlbumWhitelist(track) &&
+    passesAlbumBlacklist(track),
+);
 
 console.log(`Reduced down to ${filtered.length} tracks`);
 
 console.log(`De-duping ${filtered.length} tracks`);
-const compareTracks = first => second => (
-  first.name.toLowerCase() === second.name.toLowerCase() && arraysEqual(first.artists, second.artists)
+const compareTracks = first => second =>
+  first.name.toLowerCase() === second.name.toLowerCase() &&
+  arraysEqual(first.artists, second.artists);
+const uniqueTracks = filtered.filter(
+  (track, index) => filtered.findIndex(compareTracks(track)) === index,
 );
-const uniqueTracks = filtered.filter((track, index) => (
-  filtered.findIndex(compareTracks(track)) === index
-));
 console.log(`Reduced down to ${uniqueTracks.length} tracks`);
 
 fs.writeFileSync('filtered.json', JSON.stringify(uniqueTracks, null, 2));

@@ -27,16 +27,18 @@ if (!command) {
 }
 
 const callback = (req, res) => {
-  auth.getAccessToken(clientId, clientSecret, req.query.code, redirectUri).then((token) => {
-    res.send('Building your playlist, switch back to the terminal!');
+  auth
+    .getAccessToken(clientId, clientSecret, req.query.code, redirectUri)
+    .then(token => {
+      res.send('Building your playlist, switch back to the terminal!');
 
-    command(token)
-      .then(() => server.close())
-      .catch((e) => {
-        console.error(e);
-        server.close();
-      });
-  });
+      command(token)
+        .then(() => server.close())
+        .catch(e => {
+          console.error(e);
+          server.close();
+        });
+    });
 };
 
 const app = express();
