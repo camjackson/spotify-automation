@@ -1,5 +1,5 @@
 const initApi = require('./api');
-const filteredTracks = require('./filtered.json');
+const filteredTracks = require('../data/filtered.json');
 const { chunkify } = require('./arrayUtils');
 
 const tracks = filteredTracks.sort((a, b) => b.tempo - a.tempo);

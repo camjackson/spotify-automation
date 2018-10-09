@@ -2,5 +2,5 @@
 set -e
 
 yarn getTrackData
-node filterTracks.js
+node src/filterTracks.js
 yarn createPlaylist

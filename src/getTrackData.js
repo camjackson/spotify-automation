@@ -90,7 +90,7 @@ module.exports = auth => {
       console.log(`Got features for ${trackFeatures.length} tracks`);
       console.log('Caching the data to trackFeatures.json...');
       fs.writeFileSync(
-        './trackFeatures.json',
+        './data/trackFeatures.json',
         JSON.stringify(trackFeatures, null, 2),
       );
       console.log('Done!');

@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { arraysEqual } = require('./arrayUtils');
-const tracks = require('./trackFeatures');
+const tracks = require('../data/trackFeatures.json');
 
 const maxAcousticness = 0.9;
 const minTempo = 160;
@@ -78,4 +78,4 @@ const uniqueTracks = filtered.filter(
 );
 console.log(`Reduced down to ${uniqueTracks.length} tracks`);
 
-fs.writeFileSync('filtered.json', JSON.stringify(uniqueTracks, null, 2));
+fs.writeFileSync('./data/filtered.json', JSON.stringify(uniqueTracks, null, 2));

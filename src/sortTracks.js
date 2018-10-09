@@ -1,5 +1,5 @@
 const fs = require('fs');
-const tracks = require('./trackFeatures');
+const tracks = require('../data/trackFeatures.json');
 
 const interestingFeatures = [
   'acousticness',
@@ -22,7 +22,7 @@ interestingFeatures.forEach(feature => {
     [feature]: track[feature],
   }));
   fs.writeFileSync(
-    `./sortedBy/${feature}.json`,
+    `./data/sortedBy/${feature}.json`,
     JSON.stringify(sorted, null, 2),
   );
   console.log(`Wrote sorted tracks to ./sortedBy/${feature}.json`);
