@@ -5,8 +5,10 @@
   "author": "Cam Jackson",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "format": "prettier --write *.js"
+    "getTrackData": "node index.js getTrackData",
+    "createPlaylist": "node index.js createPlaylist",
+    "format": "prettier --write *.js",
+    "lint": "eslint ."
   },
   "dependencies": {
     "express": "^4.16.3",

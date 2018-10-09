@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
 
-yarn start getTrackData
+yarn getTrackData
 node filterTracks.js
-yarn start createPlaylist
+yarn createPlaylist
