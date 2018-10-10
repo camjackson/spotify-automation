@@ -6,7 +6,7 @@ const { chunkify } = require('./arrayUtils');
 module.exports = auth => {
   const { get, getSlowly, getAll } = initApi(auth);
 
-  return getAll('/me/following?type=artist&limit=50', 'artists')
+  return getAll('/v1/me/following?type=artist&limit=5', 'artists')
     .then(artists => {
       logger.log('-------------');
       logger.log(`Fetched ${artists.length} artists:`);
@@ -18,7 +18,7 @@ module.exports = auth => {
       return Promise.all(
         artists.map(artist =>
           get(
-            `/artists/${
+            `/v1/artists/${
               artist.id
             }/albums?limit=50&include_groups=album,single,compilation`,
             'albums',
@@ -38,7 +38,7 @@ module.exports = auth => {
       logger.log('-------------\n');
 
       const albumsUrls = chunkify(albums, 20, album => album.id).map(
-        albumIds => `/albums?ids=${albumIds.join(',')}`,
+        albumIds => `/v1/albums?ids=${albumIds.join(',')}`,
       );
       return getSlowly(albumsUrls);
     })
@@ -67,7 +67,7 @@ module.exports = auth => {
       logger.log('-------------\n');
 
       const trackFeaturesUrls = chunkify(tracks, 100, track => track.id).map(
-        trackIds => `/audio-features?ids=${trackIds.join(',')}`,
+        trackIds => `/v1/audio-features?ids=${trackIds.join(',')}`,
       );
       return getSlowly(trackFeaturesUrls).then(result => [result, trackMap]);
     })

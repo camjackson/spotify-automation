@@ -10,7 +10,7 @@ const zeroPad = number => (number < 10 ? `0${number}` : number);
 module.exports = auth => {
   const { get, post, postAll } = initApi(auth);
 
-  return get('/me')
+  return get('/v1/me')
     .then(user => {
       const today = new Date();
       const formattedDate = `${today.getFullYear()}-${zeroPad(
@@ -25,10 +25,9 @@ module.exports = auth => {
       logger.log(`Retrieved user ${user.id}`);
       logger.log(`Creating a new playlist called "${playlist.name}"`);
 
-      return post(`/users/${user.id}/playlists`, playlist).then(newPlaylist => [
-        newPlaylist,
-        user,
-      ]);
+      return post(`/v1/users/${user.id}/playlists`, playlist).then(
+        newPlaylist => [newPlaylist, user],
+      );
     })
     .then(([playlist, user]) => {
       logger.log('Playlist created succesfully!');
@@ -39,13 +38,13 @@ module.exports = auth => {
 
       const trackUriSets = chunkify(tracks, 100, track => track.uri);
       return postAll(
-        `/users/${user.id}/playlists/${playlist.id}/tracks`,
+        `/v1/users/${user.id}/playlists/${playlist.id}/tracks`,
         trackUriSets,
       ).then(() => [playlist, user]);
     })
     .then(([playlist, user]) => {
       logger.log('Tracks added succesfully succesfully!');
-      return get(`/users/${user.id}/playlists/${playlist.id}`);
+      return get(`/v1/users/${user.id}/playlists/${playlist.id}`);
     })
     .then(playlist => {
       logger.log(`Playlist now has ${playlist.tracks.total} tracks!`);
