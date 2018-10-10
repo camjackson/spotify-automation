@@ -1,4 +1,5 @@
 const fs = require('fs');
+const logger = require('./logger');
 const initApi = require('./api');
 const { chunkify } = require('./arrayUtils');
 
@@ -7,12 +8,12 @@ module.exports = auth => {
 
   return getAll('/me/following?type=artist&limit=50', 'artists')
     .then(artists => {
-      console.log('-------------');
-      console.log(`Fetched ${artists.length} artists:`);
+      logger.log('-------------');
+      logger.log(`Fetched ${artists.length} artists:`);
       artists.forEach(artist => {
-        console.log(artist.name);
+        logger.log(artist.name);
       });
-      console.log('-------------\n');
+      logger.log('-------------\n');
 
       return Promise.all(
         artists.map(artist =>
@@ -31,10 +32,10 @@ module.exports = auth => {
         [],
       );
 
-      console.log('-------------');
-      console.log(`Listed ${albums.length} albums`);
-      console.log('Listing all their tracks...');
-      console.log('-------------\n');
+      logger.log('-------------');
+      logger.log(`Listed ${albums.length} albums`);
+      logger.log('Listing all their tracks...');
+      logger.log('-------------\n');
 
       const albumsUrls = chunkify(albums, 20, album => album.id).map(
         albumIds => `/albums?ids=${albumIds.join(',')}`,
@@ -60,10 +61,10 @@ module.exports = auth => {
         {},
       );
 
-      console.log('-------------');
-      console.log(`Listed ${tracks.length} tracks`);
-      console.log('Fetching all their audio features...');
-      console.log('-------------\n');
+      logger.log('-------------');
+      logger.log(`Listed ${tracks.length} tracks`);
+      logger.log('Fetching all their audio features...');
+      logger.log('-------------\n');
 
       const trackFeaturesUrls = chunkify(tracks, 100, track => track.id).map(
         trackIds => `/audio-features?ids=${trackIds.join(',')}`,
@@ -86,14 +87,14 @@ module.exports = auth => {
           }),
         );
 
-      console.log('-------------');
-      console.log(`Got features for ${trackFeatures.length} tracks`);
-      console.log('Caching the data to trackFeatures.json...');
+      logger.log('-------------');
+      logger.log(`Got features for ${trackFeatures.length} tracks`);
+      logger.log('Caching the data to trackFeatures.json...');
       fs.writeFileSync(
         './data/trackFeatures.json',
         JSON.stringify(trackFeatures, null, 2),
       );
-      console.log('Done!');
-      console.log('-------------\n');
+      logger.log('Done!');
+      logger.log('-------------\n');
     });
 };

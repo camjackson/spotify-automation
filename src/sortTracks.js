@@ -1,4 +1,5 @@
 const fs = require('fs');
+const logger = require('./logger');
 const tracks = require('../data/trackFeatures.json');
 
 const interestingFeatures = [
@@ -13,7 +14,7 @@ const interestingFeatures = [
 ];
 
 interestingFeatures.forEach(feature => {
-  console.log(`Sorting by ${feature}`);
+  logger.log(`Sorting by ${feature}`);
   const sorted = tracks.sort((a, b) => a[feature] - b[feature]).map(track => ({
     id: track.id,
     name: track.name,
@@ -25,7 +26,7 @@ interestingFeatures.forEach(feature => {
     `./data/sortedBy/${feature}.json`,
     JSON.stringify(sorted, null, 2),
   );
-  console.log(`Wrote sorted tracks to ./sortedBy/${feature}.json`);
+  logger.log(`Wrote sorted tracks to ./sortedBy/${feature}.json`);
 });
 
-console.log('Done!');
+logger.log('Done!');

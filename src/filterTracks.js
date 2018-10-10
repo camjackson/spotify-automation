@@ -1,4 +1,5 @@
 const fs = require('fs');
+const logger = require('./logger');
 const { arraysEqual } = require('./arrayUtils');
 const tracks = require('../data/trackFeatures.json');
 
@@ -47,14 +48,14 @@ const passesAlbumBlacklist = track => {
   for (let i = 0; i < track.artists.length; i++) {
     const blacklistAlbums = artistBlacklistedAlbums[track.artists[i]];
     if (blacklistAlbums && blacklistAlbums.includes(track.album)) {
-      console.log('Blacklisted:', track.artists, track.album, track.name);
+      logger.log('Blacklisted:', track.artists, track.album, track.name);
       return false;
     }
   }
   return true;
 };
 
-console.log(`Filtering ${tracks.length} tracks`);
+logger.log(`Filtering ${tracks.length} tracks`);
 const filtered = tracks.filter(
   track =>
     track.acousticness <= maxAcousticness &&
@@ -67,15 +68,15 @@ const filtered = tracks.filter(
     passesAlbumBlacklist(track),
 );
 
-console.log(`Reduced down to ${filtered.length} tracks`);
+logger.log(`Reduced down to ${filtered.length} tracks`);
 
-console.log(`De-duping ${filtered.length} tracks`);
+logger.log(`De-duping ${filtered.length} tracks`);
 const compareTracks = first => second =>
   first.name.toLowerCase() === second.name.toLowerCase() &&
   arraysEqual(first.artists, second.artists);
 const uniqueTracks = filtered.filter(
   (track, index) => filtered.findIndex(compareTracks(track)) === index,
 );
-console.log(`Reduced down to ${uniqueTracks.length} tracks`);
+logger.log(`Reduced down to ${uniqueTracks.length} tracks`);
 
 fs.writeFileSync('./data/filtered.json', JSON.stringify(uniqueTracks, null, 2));

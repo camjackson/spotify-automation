@@ -32,7 +32,6 @@
     ],
     "rules": {
       "max-len": "off",
-      "no-console": "off",
       "arrow-parens": "off",
       "prefer-destructuring": "off",
       "operator-linebreak": "off",
