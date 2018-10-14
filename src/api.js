@@ -1,8 +1,8 @@
 const url = require('url');
 const requestPromise = require('request-promise');
+const sleep = require('./sleep');
 
 const baseUrl = 'https://api.spotify.com';
-const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 module.exports = auth => {
   const request = requestPromise.defaults({

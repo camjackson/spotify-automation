@@ -8,7 +8,8 @@
     "getTrackData": "node src/index.js getTrackData",
     "createPlaylist": "node src/index.js createPlaylist",
     "format": "prettier --write \"src/**/*.js\"",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "jest --watch --watchPathIgnorePatterns 'data/'"
   },
   "dependencies": {
     "express": "^4.16.3",
@@ -22,6 +23,8 @@
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-import": "^2.12.0",
     "husky": "^1.1.1",
+    "jest": "^23.6.0",
+    "nock": "^10.0.1",
     "prettier": "^1.14.3",
     "pretty-quick": "^1.7.0"
   },
@@ -30,6 +33,9 @@
       "airbnb-base",
       "prettier"
     ],
+    "env": {
+      "jest": true
+    },
     "rules": {
       "max-len": "off",
       "arrow-parens": "off",

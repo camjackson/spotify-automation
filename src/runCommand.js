@@ -9,6 +9,8 @@ const redirectUri = `http://localhost:${port}/${callbackEndpoint}`;
 
 const runCommand = command => {
   let server;
+  let resolve;
+  let reject;
 
   if (!clientId) {
     logger.error('clientId is not set!');
@@ -32,15 +34,21 @@ const runCommand = command => {
         res.send('Building your playlist, switch back to the terminal!');
 
         command(token)
-          .then(() => server.close())
-          .catch(e => {
-            logger.error(e.message);
+          .then(() => {
+            logger.log('Command finished!');
             server.close();
+            resolve();
+          })
+          .catch(e => {
+            logger.error(e);
+            server.close();
+            reject(e);
           });
       })
       .catch(e => {
-        logger.error(e.message);
+        logger.error(e);
         server.close();
+        reject(e);
       });
   };
 
@@ -48,6 +56,10 @@ const runCommand = command => {
   app.get(`/${callbackEndpoint}`, callback);
   server = app.listen(port, () => {
     auth.beginAuthFlow(clientId, redirectUri);
+  });
+  return new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
   });
 };
 

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "track0-0-0",
+    "boltiness": 1,
+    "name": "Deadbolt",
+    "artists": ["Thrice"],
+    "album": "The Illusion Of Safety"
+  },
+  {
+    "id": "track0-0-1",
+    "trustworthiness": 1,
+    "name": "Trust",
+    "artists": ["Thrice"],
+    "album": "The Illusion Of Safety"
+  },
+  {
+    "id": "track0-1-0",
+    "amountLeft": 0,
+    "name": "All That's Left",
+    "artists": ["Thrice"],
+    "album": "The Artist In The Ambulance"
+  },
+  {
+    "id": "track0-1-1",
+    "meltingPoint": 0,
+    "name": "The Melting Point Of Wax",
+    "artists": ["Thrice"],
+    "album": "The Artist In The Ambulance"
+  },
+  {
+    "id": "track1-0-0",
+    "locationCertainty": 0,
+    "name": "This Could Be Anywhere In The World",
+    "artists": ["Alexisonfire"],
+    "album": "Crisis"
+  },
+  {
+    "id": "track1-0-1",
+    "frogTemperature": 99,
+    "name": "Boiled Frogs",
+    "artists": ["Alexisonfire"],
+    "album": "Crisis"
+  },
+  {
+    "id": "track2-0-0",
+    "thoughts": -1,
+    "name": "Real Life",
+    "artists": ["Cog"],
+    "album": "The New Normal"
+  },
+  {
+    "id": "track2-0-1",
+    "speed": 1,
+    "name": "Run",
+    "artists": ["Cog"],
+    "album": "The New Normal"
+  }
+]

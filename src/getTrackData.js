@@ -6,7 +6,7 @@ const { chunkify } = require('./arrayUtils');
 module.exports = auth => {
   const { get, getSlowly, getAll } = initApi(auth);
 
-  return getAll('/v1/me/following?type=artist&limit=5', 'artists')
+  return getAll('/v1/me/following?type=artist&limit=50', 'artists')
     .then(artists => {
       logger.log('-------------');
       logger.log(`Fetched ${artists.length} artists:`);
@@ -21,7 +21,6 @@ module.exports = auth => {
             `/v1/artists/${
               artist.id
             }/albums?limit=50&include_groups=album,single,compilation`,
-            'albums',
           ),
         ),
       );
