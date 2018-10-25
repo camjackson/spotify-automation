@@ -5,6 +5,7 @@ const artists = [
   { id: 'artist0', name: 'Thrice' },
   { id: 'artist1', name: 'Alexisonfire' },
   { id: 'artist2', name: 'Cog' },
+  { id: 'artist3', name: 'Solar Fields' },
 ];
 const artistIds = artists.map(getId);
 const artistWithId = id => artists.find(artist => artist.id === id);
@@ -15,6 +16,7 @@ const albumsByArtist = {
   ],
   artist1: [{ id: 'album1-0', name: 'Crisis' }],
   artist2: [{ id: 'album2-0', name: 'The New Normal' }],
+  artist3: [{ id: 'album3-0', name: 'Leaving Home' }],
 };
 const albumIds = artistIds.reduce(
   (result, artistId) => result.concat(albumsByArtist[artistId].map(getId)),
@@ -37,6 +39,7 @@ const tracksByAlbum = {
     { id: 'track2-0-0', name: 'Real Life' },
     { id: 'track2-0-1', name: 'Run' },
   ],
+  'album3-0': [{ id: 'track3-0-0', name: 'Star Fruit' }],
 };
 const trackIds = albumIds.reduce(
   (result, albumId) => result.concat(tracksByAlbum[albumId].map(getId)),
@@ -61,7 +64,7 @@ const urls = {
   getMyArtists: '/v1/me/following?type=artist&limit=50',
   getArtistAlbums: artistId =>
     `/v1/artists/${artistId}/albums?limit=50&include_groups=album,single,compilation`,
-  getAlbums: `/v1/albums?ids=${albumIds.join(',')}`,
+  getAlbums: `/v1/albums?ids=album0-0,album0-1,album1-0,album2-0`,
   getTrackFeatures: `/v1/audio-features?ids=${trackIds.join(',')}`,
 };
 
@@ -73,7 +76,7 @@ const myArtists0 = {
 };
 const myArtists1 = {
   artists: {
-    items: artists.slice(2, 3),
+    items: artists.slice(2),
   },
 };
 const idOnly = entity => ({ id: entity.id });

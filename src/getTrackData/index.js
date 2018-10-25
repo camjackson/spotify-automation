@@ -1,30 +1,31 @@
 const fs = require('fs');
-const logger = require('./logger');
-const initApi = require('./api');
-const { chunkify } = require('./arrayUtils');
+const logger = require('../logger');
+const initApi = require('../api');
+const { chunkify } = require('../arrayUtils');
+const getMyArtists = require('./getMyArtists');
 
-module.exports = auth => {
-  const { get, getSlowly, getAll } = initApi(auth);
+module.exports = async auth => {
+  const api = initApi(auth);
+  const { get, getSlowly } = api;
 
-  return getAll('/v1/me/following?type=artist&limit=50', 'artists')
-    .then(artists => {
-      logger.log('-------------');
-      logger.log(`Fetched ${artists.length} artists:`);
-      artists.forEach(artist => {
-        logger.log(artist.name);
-      });
-      logger.log('-------------\n');
+  const myArtists = await getMyArtists(api);
 
-      return Promise.all(
-        artists.map(artist =>
-          get(
-            `/v1/artists/${
-              artist.id
-            }/albums?limit=50&include_groups=album,single,compilation`,
-          ),
-        ),
-      );
-    })
+  logger.log('-------------');
+  logger.log(`Fetched ${myArtists.length} (non-banned) artists:`);
+  myArtists.forEach(artist => {
+    logger.log(artist.name);
+  });
+  logger.log('-------------\n');
+
+  return Promise.all(
+    myArtists.map(artist =>
+      get(
+        `/v1/artists/${
+          artist.id
+        }/albums?limit=50&include_groups=album,single,compilation`,
+      ),
+    ),
+  )
     .then(allArtistsAllAlbums => {
       const albums = allArtistsAllAlbums.reduce(
         (result, artistAlbums) => result.concat(artistAlbums.items),

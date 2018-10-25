@@ -20,6 +20,14 @@ const finalTrackData = require('./finalTrackData.json');
 const { urls, responses } = data;
 
 describe('journey test', () => {
+  beforeEach(() => {
+    process.env.bannedArtists = ['Solar Fields'];
+  });
+
+  afterEach(() => {
+    process.env.bannedArtists = undefined;
+  });
+
   it('works from end to end', async () => {
     const fsWrite = jest
       .spyOn(fs, 'writeFileSync')
