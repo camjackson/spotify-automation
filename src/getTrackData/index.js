@@ -3,10 +3,11 @@ const logger = require('../logger');
 const initApi = require('../api');
 const { chunkify } = require('../arrayUtils');
 const getMyArtists = require('./getMyArtists');
+const getArtistsAlbums = require('./getArtistsAlbums');
 
 module.exports = async auth => {
   const api = initApi(auth);
-  const { get, getSlowly } = api;
+  const { getSlowly } = api;
 
   const myArtists = await getMyArtists(api);
 
@@ -17,31 +18,17 @@ module.exports = async auth => {
   });
   logger.log('-------------\n');
 
-  return Promise.all(
-    myArtists.map(artist =>
-      get(
-        `/v1/artists/${
-          artist.id
-        }/albums?limit=50&include_groups=album,single,compilation`,
-      ),
-    ),
-  )
-    .then(allArtistsAllAlbums => {
-      const albums = allArtistsAllAlbums.reduce(
-        (result, artistAlbums) => result.concat(artistAlbums.items),
-        [],
-      );
+  const artistAlbums = await getArtistsAlbums(api, myArtists);
 
-      logger.log('-------------');
-      logger.log(`Listed ${albums.length} albums`);
-      logger.log('Listing all their tracks...');
-      logger.log('-------------\n');
+  logger.log('-------------');
+  logger.log(`Listed ${artistAlbums.length} albums`);
+  logger.log('Listing all their tracks...');
+  logger.log('-------------\n');
 
-      const albumsUrls = chunkify(albums, 20, album => album.id).map(
-        albumIds => `/v1/albums?ids=${albumIds.join(',')}`,
-      );
-      return getSlowly(albumsUrls);
-    })
+  const albumsUrls = chunkify(artistAlbums, 20, album => album.id).map(
+    albumIds => `/v1/albums?ids=${albumIds.join(',')}`,
+  );
+  return getSlowly(albumsUrls)
     .then(albumChunks => {
       const albums = albumChunks.reduce(
         (result, albumChunk) => result.concat(albumChunk.albums),
