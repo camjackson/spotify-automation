@@ -1,3 +1,5 @@
+const { flatten } = require('../arrayUtils');
+
 const getArtistsAlbums = async ({ get }, artists) => {
   const allArtistsAllAlbums = await Promise.all(
     artists.map(artist =>
@@ -8,10 +10,9 @@ const getArtistsAlbums = async ({ get }, artists) => {
       ),
     ),
   );
-  const albums = allArtistsAllAlbums.reduce(
-    (result, artistAlbums) => result.concat(artistAlbums.items),
-    [],
-  );
+  const albums = flatten(allArtistsAllAlbums, 'items');
+
+  // TODO: filter albums
 
   return albums;
 };

@@ -19,7 +19,19 @@ const arraysEqual = (a, b) => {
   return true;
 };
 
+const flatten = (arr, key) =>
+  arr.reduce(
+    (result, innerArr) =>
+      key ? result.concat(innerArr[key]) : result.concat(innerArr),
+    [],
+  );
+
+const indexBy = (arr, key) =>
+  arr.reduce((result, obj) => Object.assign(result, { [obj[key]]: obj }), {});
+
 module.exports = {
   chunkify,
   arraysEqual,
+  flatten,
+  indexBy,
 };
