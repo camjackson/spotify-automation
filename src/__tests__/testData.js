@@ -13,9 +13,13 @@ const albumsByArtist = {
   artist0: [
     { id: 'album0-0', name: 'The Illusion Of Safety' },
     { id: 'album0-1', name: 'The Artist In The Ambulance' },
+    { id: 'album0-2', name: 'Vheissu' },
   ],
   artist1: [{ id: 'album1-0', name: 'Crisis' }],
-  artist2: [{ id: 'album2-0', name: 'The New Normal' }],
+  artist2: [
+    { id: 'album2-0', name: 'The New Normal' },
+    { id: 'album2-1', name: 'Sharing Space' },
+  ],
   artist3: [{ id: 'album3-0', name: 'Leaving Home' }],
 };
 const albumIds = artistIds.reduce(
@@ -31,6 +35,10 @@ const tracksByAlbum = {
     { id: 'track0-1-0', name: "All That's Left" },
     { id: 'track0-1-1', name: 'The Melting Point Of Wax' },
   ],
+  'album0-2': [
+    { id: 'track0-2-0', name: 'Music Box' },
+    { id: 'track0-2-1', name: 'Red Sky' },
+  ],
   'album1-0': [
     { id: 'track1-0-0', name: 'This Could Be Anywhere In The World' },
     { id: 'track1-0-1', name: 'Boiled Frogs' },
@@ -38,6 +46,10 @@ const tracksByAlbum = {
   'album2-0': [
     { id: 'track2-0-0', name: 'Real Life' },
     { id: 'track2-0-1', name: 'Run' },
+  ],
+  'album2-1': [
+    { id: 'track2-1-0', name: 'No Other Way' },
+    { id: 'track2-1-1', name: 'Are You Interested?' },
   ],
   'album3-0': [{ id: 'track3-0-0', name: 'Star Fruit' }],
 };
@@ -79,12 +91,11 @@ const myArtists1 = {
     items: artists.slice(2),
   },
 };
-const idOnly = entity => ({ id: entity.id });
 const artistAlbums = artistIds.reduce(
   (result, artistId) => ({
     ...result,
     [artistId]: {
-      items: albumsByArtist[artistId].map(idOnly),
+      items: albumsByArtist[artistId],
     },
   }),
   {},

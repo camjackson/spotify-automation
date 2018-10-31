@@ -2,6 +2,7 @@ const fs = require('fs');
 const logger = require('../logger');
 const initApi = require('../api');
 const getMyArtists = require('./0-getMyArtists');
+const { checkForUnknownArtists } = require('./filters');
 const getArtistsAlbums = require('./1-getArtistsAlbums');
 const getAlbumTracks = require('./2-getAlbumTracks');
 const getTrackFeatures = require('./3-getTrackFeatures');
@@ -16,6 +17,7 @@ module.exports = async auth => {
   myArtists.forEach(artist => {
     logger.log(artist.name);
   });
+  checkForUnknownArtists(myArtists);
   logger.log('-------------\n');
 
   const artistAlbums = await getArtistsAlbums(api, myArtists);

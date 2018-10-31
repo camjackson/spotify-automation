@@ -15,17 +15,28 @@ const nock = require('nock');
 const data = require('./testData');
 const runCommand = require('../runCommand');
 const getTrackData = require('../getTrackData');
+const filters = require('../getTrackData/filters');
 const finalTrackData = require('./finalTrackData.json');
 
 const { urls, responses } = data;
 
 describe('journey test', () => {
+  const originalFilters = {};
+
   beforeEach(() => {
-    process.env.bannedArtists = ['Solar Fields'];
+    Object.assign(originalFilters, filters);
+
+    filters.bannedArtists = ['Solar Fields'];
+    filters.artistsWithAlbumWhitelist = {
+      Cog: ['The New Normal'],
+    };
+    filters.artistsWithAlbumBlacklist = {
+      Thrice: ['Vheissu'],
+    };
   });
 
   afterEach(() => {
-    process.env.bannedArtists = undefined;
+    Object.assign(filters, originalFilters);
   });
 
   it('works from end to end', async () => {

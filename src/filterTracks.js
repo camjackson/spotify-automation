@@ -10,51 +10,6 @@ const minDuration = 30000;
 const maxLiveness = 0.8;
 const maxInstrumentalness = 0.5;
 
-const artistsWhitelistedAlbums = {
-  Pendulum: ['Immersion'],
-};
-
-const passesAlbumWhitelist = track => {
-  const matchingArtists = track.artists.filter(
-    artist => artistsWhitelistedAlbums[artist],
-  );
-  if (matchingArtists.length === 0) {
-    // None of this track's artists appear in the list above
-    return true;
-  }
-
-  for (let i = 0; i < matchingArtists.length; i++) {
-    if (artistsWhitelistedAlbums[matchingArtists[i]].includes(track.album)) {
-      // The track's album is in the whitelist
-      return true;
-    }
-  }
-  // The artist is above, but the album isn't in the whitelist
-  return false;
-};
-
-const artistBlacklistedAlbums = {
-  Thrice: ['Anthology', 'Live At The House of Blues'],
-  Incubus: [
-    'Live In Sweden 2004',
-    'Live in Japan 2004',
-    'Live',
-    'Live in Malaysia 2004',
-  ],
-  Alexisonfire: ['Live At Copps'],
-};
-
-const passesAlbumBlacklist = track => {
-  for (let i = 0; i < track.artists.length; i++) {
-    const blacklistAlbums = artistBlacklistedAlbums[track.artists[i]];
-    if (blacklistAlbums && blacklistAlbums.includes(track.album)) {
-      logger.log('Blacklisted:', track.artists, track.album, track.name);
-      return false;
-    }
-  }
-  return true;
-};
-
 logger.log(`Filtering ${tracks.length} tracks`);
 const filtered = tracks.filter(
   track =>
@@ -63,9 +18,7 @@ const filtered = tracks.filter(
     track.tempo <= maxTempo &&
     track.duration_ms >= minDuration &&
     track.liveness <= maxLiveness &&
-    track.instrumentalness <= maxInstrumentalness &&
-    passesAlbumWhitelist(track) &&
-    passesAlbumBlacklist(track),
+    track.instrumentalness <= maxInstrumentalness,
 );
 
 logger.log(`Reduced down to ${filtered.length} tracks`);
