@@ -58,6 +58,13 @@ const artistsWithAlbumWhitelist = {
   'Porcupine Tree': ['The Incident'],
   'Snarky Puppy': ['Culcha Vulcha', 'We Like It Here'],
   Pendulum: ['Immersion'],
+  'Foo Fighters': [
+    'Foo Fighters',
+    'The Colour And The Shape (Expanded Edition)',
+    'There Is Nothing Left To Lose',
+    'One By One (Expanded Edition)',
+    'In Your Honor',
+  ],
 };
 const artistsWithAlbumBlacklist = {
   Thrice: ['Anthology', 'Live At The House of Blues'],
