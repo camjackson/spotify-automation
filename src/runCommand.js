@@ -1,7 +1,9 @@
+const fs = require('fs');
 const express = require('express');
 const logger = require('./logger');
 const { clientId, clientSecret } = require('./creds');
 const auth = require('./auth');
+const cachedToken = require('../data/token.json').token;
 
 const port = 8080;
 const callbackEndpoint = 'callback';
@@ -27,23 +29,22 @@ const runCommand = command => {
     process.exit(1);
   }
 
+  const run = token => {
+    command(token).then(() => {
+      logger.log('Command finished!');
+      server.close();
+      resolve();
+    });
+  };
+
   const callback = (req, res) => {
     auth
       .getAccessToken(clientId, clientSecret, req.query.code, redirectUri)
       .then(token => {
         res.send('Building your playlist, switch back to the terminal!');
+        fs.writeFileSync('./data/token.json', JSON.stringify({ token }));
 
-        command(token)
-          .then(() => {
-            logger.log('Command finished!');
-            server.close();
-            resolve();
-          })
-          .catch(e => {
-            logger.error(e);
-            server.close();
-            reject(e);
-          });
+        return run(token);
       })
       .catch(e => {
         logger.error(e);
@@ -55,7 +56,11 @@ const runCommand = command => {
   const app = express();
   app.get(`/${callbackEndpoint}`, callback);
   server = app.listen(port, () => {
-    auth.beginAuthFlow(clientId, redirectUri);
+    if (cachedToken) {
+      run(cachedToken);
+    } else {
+      auth.beginAuthFlow(clientId, redirectUri);
+    }
   });
   return new Promise((res, rej) => {
     resolve = res;
