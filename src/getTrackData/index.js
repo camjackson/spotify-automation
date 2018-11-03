@@ -6,6 +6,7 @@ const { checkForUnknownArtists } = require('./filters');
 const getArtistsAlbums = require('./1-getArtistsAlbums');
 const getAlbumTracks = require('./2-getAlbumTracks');
 const getTrackFeatures = require('./3-getTrackFeatures');
+const cachedTrackFeatures = require('../../data/trackFeatures.json');
 
 module.exports = async auth => {
   const api = initApi(auth);
@@ -34,7 +35,11 @@ module.exports = async auth => {
   logger.log('Fetching all their audio features...');
   logger.log('-------------\n');
 
-  const trackFeatures = await getTrackFeatures(api, tracks);
+  const trackFeatures = await getTrackFeatures(
+    api,
+    tracks,
+    cachedTrackFeatures,
+  );
 
   logger.log('-------------');
   logger.log(`Got features for ${trackFeatures.length} tracks`);

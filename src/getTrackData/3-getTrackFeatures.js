@@ -1,23 +1,29 @@
 const { chunkify, indexBy, flatten } = require('../arrayUtils');
 
-const getTrackFeatures = async ({ getSlowly }, tracks) => {
-  const trackFeaturesUrls = chunkify(tracks, 100, track => track.id).map(
+const getTrackFeatures = async ({ getSlowly }, tracks, cachedTrackFeatures) => {
+  const cachedIds = cachedTrackFeatures.map(track => track.id);
+  const newTracks = tracks.filter(track => !cachedIds.includes(track.id));
+  const newTrackMap = indexBy(newTracks, 'id');
+
+  const trackFeaturesUrls = chunkify(newTracks, 100, track => track.id).map(
     trackIds => `/v1/audio-features?ids=${trackIds.join(',')}`,
   );
 
-  const trackFeatures = flatten(
+  const newTrackFeatures = flatten(
     await getSlowly(trackFeaturesUrls),
     'audio_features',
   );
-  const trackMap = indexBy(tracks, 'id');
 
-  return trackFeatures.filter(track => !!track).map(track =>
-    Object.assign(track, {
-      name: trackMap[track.id].name,
-      artists: trackMap[track.id].artists.map(artist => artist.name),
-      album: trackMap[track.id].album,
-    }),
-  );
+  return newTrackFeatures
+    .filter(track => !!track)
+    .map(track =>
+      Object.assign(track, {
+        name: newTrackMap[track.id].name,
+        artists: newTrackMap[track.id].artists.map(artist => artist.name),
+        album: newTrackMap[track.id].album,
+      }),
+    )
+    .concat(cachedTrackFeatures);
 };
 
 module.exports = getTrackFeatures;
