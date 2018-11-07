@@ -57,8 +57,8 @@ const newPromise = () => {
   return { promise, resolve, reject };
 };
 
-const getToken = async () => {
-  if (cachedToken) {
+const getToken = async useCache => {
+  if (cachedToken && useCache) {
     return cachedToken;
   }
   if (!clientId) {

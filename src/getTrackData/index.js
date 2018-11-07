@@ -8,7 +8,7 @@ const getAlbumTracks = require('./2-getAlbumTracks');
 const getTrackFeatures = require('./3-getTrackFeatures');
 const cachedTrackFeatures = require('../../data/trackFeatures.json');
 
-module.exports = async auth => {
+module.exports = async (auth, useCache) => {
   const api = initApi(auth);
 
   const myArtists = await getMyArtists(api);
@@ -38,7 +38,7 @@ module.exports = async auth => {
   const trackFeatures = await getTrackFeatures(
     api,
     tracks,
-    cachedTrackFeatures,
+    useCache ? cachedTrackFeatures : [],
   );
 
   logger.log('-------------');

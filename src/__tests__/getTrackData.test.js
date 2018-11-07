@@ -22,6 +22,7 @@ const { urls, responses } = data;
 
 describe('journey test', () => {
   const originalFilters = {};
+  let fsWrite;
 
   beforeEach(() => {
     Object.assign(originalFilters, filters);
@@ -33,22 +34,22 @@ describe('journey test', () => {
     filters.artistsWithAlbumBlacklist = {
       Thrice: ['Vheissu'],
     };
+
+    fsWrite = jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
   });
 
   afterEach(() => {
     Object.assign(filters, originalFilters);
+    fsWrite.mockRestore();
   });
 
   it('works from end to end', async () => {
-    const fsWrite = jest
-      .spyOn(fs, 'writeFileSync')
-      .mockImplementation(() => {});
-
     const authServer = nock(urls.accounts)
       .post(urls.token, body => body.code === 'SOME_CODE')
       .reply(200, responses.token);
 
     const apiServer = nock(urls.apiBase)
+      // .log(console.log)
       // Requesting own followed artists:
       .get(urls.getMyArtists)
       .reply(200, responses.myArtists0)
@@ -71,16 +72,19 @@ describe('journey test', () => {
       .get(urls.getTrackFeatures)
       .reply(200, responses.trackFeatures);
 
-    await runCommand(getTrackData);
+    await runCommand(getTrackData, false);
 
     authServer.done();
     apiServer.done();
 
-    expect(fsWrite).toHaveBeenCalledWith(
-      './data/trackFeatures.json',
-      JSON.stringify(finalTrackData, null, 2),
+    // Doing these assertions by hand because the last one will cause Jest to
+    // hang while logging if the diff b/w expected and actual is too huge.
+    const [token, features] = fsWrite.mock.calls;
+    expect(token[0]).toEqual('./data/token.json');
+    expect(token[1]).toEqual('{"token":"Bearer SOME_TOKEN"}');
+    expect(features[0]).toEqual('./data/trackFeatures.json');
+    expect(features[1] === JSON.stringify(finalTrackData, null, 2)).toEqual(
+      true,
     );
-
-    fsWrite.mockRestore();
   });
 });
