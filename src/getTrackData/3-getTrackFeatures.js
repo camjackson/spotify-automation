@@ -1,4 +1,4 @@
-const { chunkify, indexBy, flatten } = require('../arrayUtils');
+const { chunkify, indexBy, flatten } = require('../util/arrayUtils');
 
 const getTrackFeatures = async ({ getSlowly }, tracks, cachedTrackFeatures) => {
   const cachedIds = cachedTrackFeatures.map(track => track.id);

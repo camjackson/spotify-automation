@@ -1,5 +1,5 @@
 const filters = require('./filters');
-const { flatten } = require('../arrayUtils');
+const { flatten } = require('../util/arrayUtils');
 
 const getArtistsAlbums = async ({ get }, artists) => {
   const allArtistsAllAlbums = await Promise.all(

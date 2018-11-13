@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const opn = require('opn');
 const request = require('request-promise');
-const logger = require('./logger');
+const logger = require('./util/logger');
 const { clientId, clientSecret } = require('./creds');
 const cachedToken = require('../data/token.json').token;
 

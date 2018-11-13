@@ -1,4 +1,4 @@
-const { chunkify, flatten } = require('../arrayUtils');
+const { chunkify, flatten } = require('../util/arrayUtils');
 
 const getAlbumTracks = async ({ getSlowly }, artistAlbums) => {
   const albumsUrls = chunkify(artistAlbums, 20, album => album.id).map(

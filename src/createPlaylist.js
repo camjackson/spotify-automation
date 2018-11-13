@@ -1,7 +1,7 @@
-const logger = require('./logger');
-const initApi = require('./api');
+const logger = require('./util/logger');
+const initApi = require('./util/api');
 const filteredTracks = require('../data/filtered.json');
-const { chunkify } = require('./arrayUtils');
+const { chunkify } = require('./util/arrayUtils');
 
 const tracks = filteredTracks.sort((a, b) => b.tempo - a.tempo);
 

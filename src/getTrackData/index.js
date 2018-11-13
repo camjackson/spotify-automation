@@ -1,6 +1,6 @@
 const fs = require('fs');
-const logger = require('../logger');
-const initApi = require('../api');
+const logger = require('../util/logger');
+const initApi = require('../util/api');
 const getMyArtists = require('./0-getMyArtists');
 const { checkForUnknownArtists } = require('./filters');
 const getArtistsAlbums = require('./1-getArtistsAlbums');

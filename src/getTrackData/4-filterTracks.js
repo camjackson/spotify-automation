@@ -1,4 +1,4 @@
-const { arraysEqual } = require('../arrayUtils');
+const { arraysEqual } = require('../util/arrayUtils');
 
 const maxAcousticness = 0.9;
 const minTempo = 160;

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const logger = require('./logger');
+const logger = require('./util/logger');
 const tracks = require('../data/trackFeatures.json');
 
 const interestingFeatures = [
