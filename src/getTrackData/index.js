@@ -6,6 +6,7 @@ const { checkForUnknownArtists } = require('./filters');
 const getArtistsAlbums = require('./1-getArtistsAlbums');
 const getAlbumTracks = require('./2-getAlbumTracks');
 const getTrackFeatures = require('./3-getTrackFeatures');
+const filterTracks = require('./4-filterTracks');
 const cachedTrackFeatures = require('../../data/trackFeatures.json');
 
 module.exports = async (auth, useCache) => {
@@ -47,6 +48,19 @@ module.exports = async (auth, useCache) => {
   fs.writeFileSync(
     './data/trackFeatures.json',
     JSON.stringify(trackFeatures, null, 2),
+  );
+  logger.log('Filtering tracks for runnability...');
+  logger.log('-------------\n');
+
+  const filteredTracks = filterTracks(trackFeatures);
+
+  logger.log('-------------\n');
+  logger.log(
+    `Tracks filtered down to ${filteredTracks.length} runnable, unique tracks`,
+  );
+  fs.writeFileSync(
+    './data/filtered.json',
+    JSON.stringify(filteredTracks, null, 2),
   );
   logger.log('Done!');
   logger.log('-------------\n');
