@@ -9,6 +9,18 @@ const aristsWhoDoNotGetFiltered = [
   'Cog',
   'Karnivool',
   'Solar Fields',
+  'Covet',
+  'deadmau5',
+  'Linkin Park',
+  'Polaris',
+  'Rage Against The Machine',
+  'RedHook',
+  'Roland Tings',
+  'The Story So Far',
+  'TOOL',
+  'Vulfpeck',
+  'Wolfgang Gartner',
+  'Yvette Young',
 ];
 
 const bannedArtists = [
@@ -65,7 +77,27 @@ const artistsWithAlbumWhitelist = {
     'One By One (Expanded Edition)',
     'In Your Honor',
   ],
+  Architects: ['Holy Hell'],
+  'Frank Klepacki': [
+    'Command & Conquer (Original Soundtrack) [Remastered]',
+    'Command & Conquer: Red Alert (Original Soundtrack) [Remastered]',
+    'Command & Conquer: Red Alert 2 (Original Soundtrack)',
+  ],
+  Metallica: ['St. Anger'],
+  Nirvana: ['Nevermind (Remastered)'],
+  'Pearl Jam': ['rearviewmirror (greatest hits 1991-2003)'],
+  Rammstein: ['Sehnsucht', 'Mutter'],
+  'Red Hot Chili Peppers': [
+    'By the Way',
+    'Californication',
+    'Blood Sugar Sex Magik (Deluxe Edition)',
+  ],
+  'The Smashing Pumpkins': [
+    'Mellon Collie And The Infinite Sadness (Deluxe Edition)',
+    'Siamese Dream (2011 - Remaster)',
+  ],
 };
+
 const artistsWithAlbumBlacklist = {
   Thrice: ['Anthology', 'Live At The House of Blues'],
   Alexisonfire: ['Live At Copps'],

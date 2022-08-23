@@ -2,7 +2,7 @@ const { arraysEqual } = require('../util/arrayUtils');
 
 const maxAcousticness = 0.9;
 const minTempo = 160;
-const maxTempo = 200;
+const maxTempo = 180;
 const minDuration = 30000;
 const maxLiveness = 0.8;
 const maxInstrumentalness = 0.5;

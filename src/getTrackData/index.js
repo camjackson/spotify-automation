@@ -7,6 +7,7 @@ const getArtistsAlbums = require('./1-getArtistsAlbums');
 const getAlbumTracks = require('./2-getAlbumTracks');
 const getTrackFeatures = require('./3-getTrackFeatures');
 const filterTracks = require('./4-filterTracks');
+const sortAndSaveTrackTrackFeatures = require('./sortTracksForAnalysis');
 const cachedTrackFeatures = require('../../data/trackFeatures.json');
 
 module.exports = async (auth, useCache) => {
@@ -49,6 +50,8 @@ module.exports = async (auth, useCache) => {
     './data/trackFeatures.json',
     JSON.stringify(trackFeatures, null, 2),
   );
+  logger.log('Sorting and caching the data for manual analysis...');
+  sortAndSaveTrackTrackFeatures(trackFeatures);
   logger.log('Filtering tracks for runnability...');
   logger.log('-------------\n');
 
