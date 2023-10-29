@@ -7,6 +7,7 @@
   "scripts": {
     "getTrackData": "node src/index.js getTrackData",
     "createPlaylist": "node src/index.js createPlaylist",
+    "setup": "./setup.sh",
     "format": "prettier --write \"src/**/*.js\"",
     "lint": "eslint src",
     "test": "jest --watch --watchPathIgnorePatterns 'data/'"
